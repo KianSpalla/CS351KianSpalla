@@ -28,6 +28,7 @@ public class PlatformerPlayerController : MonoBehaviour
     // A variable to hold horizontal input
     private float horizontalInput;
 
+
     // Start is called before the first frame update
     void Start()
     {
@@ -57,17 +58,17 @@ public class PlatformerPlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        //Move the player using Rigidbody2D in FixedUpdate
-        rb.velocity = new Vector2(horizontalInput * moveSpeed, rb.velocity.y);
-
         //Check if the player is grounded
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+
+        rb.velocity = new Vector2(horizontalInput * moveSpeed, rb.velocity.y);
+
 
         //TODO: Optionally we can add animations here later
 
         //Ensure the placer is facing the direction of the movement
 
-        if(horizontalInput > 0)
+        if (horizontalInput > 0)
         {
             transform.localScale = new Vector3(1f, 1f, 1f);
         }
