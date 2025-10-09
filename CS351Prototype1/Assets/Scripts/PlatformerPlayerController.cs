@@ -28,10 +28,14 @@ public class PlatformerPlayerController : MonoBehaviour
     // A variable to hold horizontal input
     private float horizontalInput;
 
+    public AudioClip jumpSound;
+    private AudioSource playerAudio;
+
 
     // Start is called before the first frame update
     void Start()
     {
+        playerAudio = GetComponent<AudioSource>();
         //Get the Rigidbody2D component attached to the gameObject
         rb = GetComponent<Rigidbody2D>();
 
@@ -53,6 +57,7 @@ public class PlatformerPlayerController : MonoBehaviour
         {
             //Apply a upward force for jumping
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+            playerAudio.PlayOneShot(jumpSound, 0.5f);
         }
     }
 
