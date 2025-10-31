@@ -31,6 +31,8 @@ public class PlatformerPlayerController : MonoBehaviour
     public AudioClip jumpSound;
     private AudioSource playerAudio;
 
+    private Animator animator;
+
 
     // Start is called before the first frame update
     void Start()
@@ -38,6 +40,7 @@ public class PlatformerPlayerController : MonoBehaviour
         playerAudio = GetComponent<AudioSource>();
         //Get the Rigidbody2D component attached to the gameObject
         rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
 
         //Ensure the groundCheck variable is assigned
         if (groundCheck == null)
@@ -70,16 +73,19 @@ public class PlatformerPlayerController : MonoBehaviour
 
 
         //TODO: Optionally we can add animations here later
+        animator.SetFloat("xVelocityAbs", Mathf.Abs(rb.velocity.x));
+        animator.SetFloat("yVelocity", rb.velocity.y);
+        animator.SetBool("onGround", isGrounded);
 
         //Ensure the placer is facing the direction of the movement
 
         if (horizontalInput > 0)
         {
-            transform.localScale = new Vector3(1f, 1f, 1f);
+            transform.rotation = Quaternion.Euler(0,0,0);
         }
         else if(horizontalInput < 0)
         {
-            transform.localScale = new Vector3(-1f, 1f, 1f);
+            transform.rotation = Quaternion.Euler(0,180,0);
         }
 
     }
