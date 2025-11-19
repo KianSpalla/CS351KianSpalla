@@ -33,6 +33,12 @@ public class PlatformerPlayerController : MonoBehaviour
 
     private Animator animator;
 
+    public LayerMask wallLayer;
+    public Transform wallCheck;
+    public float wallCheckRadius = 0.2f;
+    public float wallJumpForce = 10f;
+    private bool onWall;
+
 
     // Start is called before the first frame update
     void Start()
@@ -56,38 +62,49 @@ public class PlatformerPlayerController : MonoBehaviour
         horizontalInput = Input.GetAxis("Horizontal");
 
         //Check for jump input
-        if (Input.GetButtonDown("Jump") && isGrounded)
+        if (Input.GetButtonDown("Jump") && (isGrounded) || Input.GetButtonDown("Jump") && (onWall))
         {
             //Apply a upward force for jumping
-            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+            if (isGrounded)
+            {
+                rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+            }
+            else if (onWall)
+            {
+                rb.velocity = new Vector2(-horizontalInput * moveSpeed, wallJumpForce);
+            }
             playerAudio.PlayOneShot(jumpSound, 0.5f);
         }
     }
 
     void FixedUpdate()
     {
-        //Check if the player is grounded
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
-
-        rb.velocity = new Vector2(horizontalInput * moveSpeed, rb.velocity.y);
-
-
-        //TODO: Optionally we can add animations here later
-        animator.SetFloat("xVelocityAbs", Mathf.Abs(rb.velocity.x));
-        animator.SetFloat("yVelocity", rb.velocity.y);
-        animator.SetBool("onGround", isGrounded);
-
-        //Ensure the placer is facing the direction of the movement
-
-        if (horizontalInput > 0)
+        if (!PlayerHealth.hitRecently)
         {
-            transform.rotation = Quaternion.Euler(0,0,0);
-        }
-        else if(horizontalInput < 0)
-        {
-            transform.rotation = Quaternion.Euler(0,180,0);
-        }
 
+            //Check if the player is grounded
+            isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+            onWall = Physics2D.OverlapCircle(wallCheck.position, wallCheckRadius, wallLayer);
+
+            rb.velocity = new Vector2(horizontalInput * moveSpeed, rb.velocity.y);
+
+
+            //TODO: Optionally we can add animations here later
+            animator.SetFloat("xVelocityAbs", Mathf.Abs(rb.velocity.x));
+            animator.SetFloat("yVelocity", rb.velocity.y);
+            animator.SetBool("onGround", isGrounded);
+
+            //Ensure the placer is facing the direction of the movement
+
+            if (horizontalInput > 0)
+            {
+                transform.rotation = Quaternion.Euler(0, 0, 0);
+            }
+            else if (horizontalInput < 0)
+            {
+                transform.rotation = Quaternion.Euler(0, 180, 0);
+            }
+        }
     }
 
 }

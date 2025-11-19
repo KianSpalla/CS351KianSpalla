@@ -10,6 +10,8 @@ public class Enemy : MonoBehaviour
 
     private DisplayBar healthbar;
 
+    public int damage = 10;
+
     public void Start()
     {
         healthbar = GetComponentInChildren<DisplayBar>();
@@ -21,6 +23,23 @@ public class Enemy : MonoBehaviour
         healthbar.SetMaxValue(health);
 
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.gameObject.CompareTag("Player"))
+        {
+            PlayerHealth playerHealth = collision.gameObject.GetComponent<PlayerHealth>();
+
+            if (playerHealth == null)
+            {
+                Debug.LogError("PlayerHealth component not found on player.");
+                return;
+            }
+            playerHealth.TakeDamage(damage);
+            playerHealth.Knockback(transform.position);
+        }
+    }
+
     public void TakeDamage(int damage)
     {
         health -= damage;
