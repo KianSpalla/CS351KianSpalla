@@ -59,7 +59,7 @@ public class EnemyMoveWalkingChase : MonoBehaviour
     {
         float groundCheckDistance = 2.0f;
         LayerMask groundLayer = LayerMask.GetMask("Ground");
-        Vector2 enemyFacingDirection = transform.rotation.y == 0 ? Vector2.left : Vector2.right;
+        Vector2 enemyFacingDirection = (sr.flipX == false) ? Vector2.left : Vector2.right;
         RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down - enemyFacingDirection, groundCheckDistance, groundLayer);
 
         return hit.collider != null;
