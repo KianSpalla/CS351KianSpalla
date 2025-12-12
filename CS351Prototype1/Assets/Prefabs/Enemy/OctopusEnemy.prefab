@@ -188,7 +188,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   speed: 2
-  chaseRange: 3
+  chaseRange: 8
   currentState: 0
   target: {fileID: 0}
 --- !u!1 &1447818786965846332
